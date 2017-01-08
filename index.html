@@ -27,12 +27,12 @@
       <input type='text' id='input_text' value='よんもじ' class="form-control"/>
     </div>
     <div class="form-group">
-      <label for="input_text">フォント</label>
+      <label for="input_font">フォント</label>
       <input type='text' id='input_font' value='sans-serif' class="form-control"/>
     </div>
     <div class="form-group">
-      <label for="input_text">文字色</label>
-      <input type='color' id='input_text_color' value='#1111dd' class="form-control"/>
+      <label for="input_color">文字色</label>
+      <input type='color' id='input_color' value='#1111dd' class="form-control"/>
     </div>
   </form>
 </div>
@@ -41,24 +41,53 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript" charset="UTF-8">
+(function(){
+  var canvas2d = document.getElementById('canvas').getContext('2d');
+  var onChange = function(){
+    draw( $('#input_text').val(), 'bold 64px '+$('#input_font').val(), $('#input_color').val() );
+    save();
+  };
+  var draw = function(str, font, color ){
+    var margin = 2;
+    canvas2d.font = font;
+    canvas2d.fillStyle = color;
+    canvas2d.clearRect(0, 0, 128, 128);
+    canvas2d.fillText(str.charAt(0), 2,  58,  64);
+    canvas2d.fillText(str.charAt(1), 62, 58,  64);
+    canvas2d.fillText(str.charAt(2), 2,  122, 64);
+    canvas2d.fillText(str.charAt(3), 62, 122, 64);
+  }
+  var load = function(){
+    $.each(['text','font','color'],function(index,key){
+      var val = urlParams(key);
+      if (val){
+        $('#input_'+key).val(val);
+      }
+    });
+  }
+  var save = function(){
+    var search = '?'
+    $.each(['text','font','color'],function(index,key){
+      var val = $('#input_'+key).val();
+      search = search+'&'+key+'='+encodeURIComponent(val);
+    });
+    history.replaceState( '', null, search.replace('?&','?') );
+  }
+  var urlParams = function(key){
+    var ret = undefined;
+    var match = location.search.match(new RegExp(key+'=(.*?)(&|$)'));
+    if(match) {
+      ret = decodeURIComponent(match[1]);
+    }
+    return ret;
+  };
 
-var canvas2d = document.getElementById('canvas').getContext('2d');
-var onChange = function(){
-  var margin = 2;
-  var str = $('#input_text').val();
-  var width = $('#canvas').width();
-  canvas2d.font = 'bold 64px '+$('#input_font').val();
-  canvas2d.fillStyle = $('#input_text_color').val();
-  canvas2d.clearRect(0, 0, width, width);
-  canvas2d.fillText(str.charAt(0), 2,  58,  64);
-  canvas2d.fillText(str.charAt(1), 62, 58,  64);
-  canvas2d.fillText(str.charAt(2), 2,  122, 64);
-  canvas2d.fillText(str.charAt(3), 62, 122, 64);
-};
-$( function () {
-  $('input').on('keyup change', onChange);
-  onChange();
-} );
+  $( function () {
+    $('input').on('keyup change', onChange);
+    load();
+    onChange();
+  } );
+})();
 
 </script>
 </div>
