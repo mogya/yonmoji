@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta content="width=320, user-scalable=no" name="viewport">
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>よんもじ</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<style type="text/css">
+.form-inline input[type='color'].form-control{
+  width: 6em;
+}
+</style>
+</head>
+<body id='index_page'>
+<div id='wrapper' class="container">
+<div class="row">
+
+</div>
+<div class="row">
+  <canvas id="canvas" width="128" height="128"></canvas>
+</div>
+<div class="row">
+  <form id='form' class='form-inline'>
+    <div class="form-group">
+      <label for="input_text">四文字</label>
+      <input type='text' id='input_text' value='よんもじ' class="form-control"/>
+    </div>
+    <div class="form-group">
+      <label for="input_text">フォント</label>
+      <input type='text' id='input_font' value='sans-serif' class="form-control"/>
+    </div>
+    <div class="form-group">
+      <label for="input_text">文字色</label>
+      <input type='color' id='input_text_color' value='#1111dd' class="form-control"/>
+    </div>
+  </form>
+</div>
+</div>
+<div id="script">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" charset="UTF-8">
+
+var canvas2d = document.getElementById('canvas').getContext('2d');
+var onChange = function(){
+  var margin = 2;
+  var str = $('#input_text').val();
+  var width = $('#canvas').width();
+  canvas2d.font = 'bold 64px '+$('#input_font').val();
+  canvas2d.fillStyle = $('#input_text_color').val();
+  canvas2d.clearRect(0, 0, width, width);
+  canvas2d.fillText(str.charAt(0), 2,  58,  64);
+  canvas2d.fillText(str.charAt(1), 62, 58,  64);
+  canvas2d.fillText(str.charAt(2), 2,  122, 64);
+  canvas2d.fillText(str.charAt(3), 62, 122, 64);
+};
+$( function () {
+  $('input').on('keyup change', onChange);
+  onChange();
+} );
+
+</script>
+</div>
+</body>
+</html>
+
+
+
